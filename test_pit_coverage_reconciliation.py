@@ -7,14 +7,24 @@ import pytest
 import pandas as pd
 import numpy as np
 
+from pathlib import Path
+
 from audit_suite import pit_window_coverage
 from sp500_history import SP500HistoryManager
 from scoring_engine import ScoringEngine, ScoringWeights
 
 
+DB_PATH = Path("data/screener.db")
+UNIVERSE_CSV = Path("data/universe_sp500.csv")
+
+
 @pytest.fixture
 def screener_db_conn():
-    conn = sqlite3.connect("data/screener.db")
+    if not DB_PATH.exists() or DB_PATH.stat().st_size < 1_000_000:
+        pytest.skip(f"Production database not available at {DB_PATH}")
+    if not UNIVERSE_CSV.exists():
+        pytest.skip(f"Universe CSV not available at {UNIVERSE_CSV}")
+    conn = sqlite3.connect(str(DB_PATH))
     yield conn
     conn.close()
 

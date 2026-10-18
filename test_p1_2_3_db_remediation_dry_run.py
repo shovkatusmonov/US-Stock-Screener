@@ -27,7 +27,7 @@ SEC_FACTS_DIR = Path("data/sec_facts")
 
 @pytest.fixture(scope="module")
 def prod_db_conn():
-    if not DB_PATH.exists() or DB_PATH.stat().st_size == 0:
+    if not DB_PATH.exists() or DB_PATH.stat().st_size < 1_000_000:
         pytest.skip(f"Production database not available at {DB_PATH}")
     conn = sqlite3.connect(f"file:{DB_PATH.as_posix()}?mode=ro", uri=True)
     conn.row_factory = sqlite3.Row

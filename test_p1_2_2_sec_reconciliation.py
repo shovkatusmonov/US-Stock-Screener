@@ -30,9 +30,14 @@ def memory_db():
     conn.close()
 
 
+DB_PATH = Path("data/screener.db")
+
+
 @pytest.fixture
 def prod_db():
-    conn = sqlite3.connect("data/screener.db")
+    if not DB_PATH.exists() or DB_PATH.stat().st_size < 1_000_000:
+        pytest.skip(f"Production database not available at {DB_PATH}")
+    conn = sqlite3.connect(str(DB_PATH))
     yield conn
     conn.close()
 

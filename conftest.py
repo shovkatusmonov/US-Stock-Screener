@@ -7,6 +7,13 @@ Fair Access validation requirements.
 
 import os
 import pytest
+from pathlib import Path
+
+
+@pytest.fixture(autouse=True, scope="session")
+def ensure_runtime_dirs():
+    """Ensure data/ directory exists so SQLite connections don't fail on missing parent directory in CI."""
+    Path("data").mkdir(exist_ok=True)
 
 
 @pytest.fixture(autouse=True)
