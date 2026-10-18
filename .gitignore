@@ -12,3 +12,10 @@ reports/
 scratch/
 freeze_*.txt
 *.log
+# Local reports and exported data
+research/
+*.csv
+*.bak
+audit_report.txt
+full_audit_report.txt
+project_status_audit.txt
