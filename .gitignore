@@ -1,0 +1,14 @@
+.env
+*.env
+.venv/
+.venv_check/
+__pycache__/
+*.pyc
+*.db
+*.db-journal
+data/
+backups/
+reports/
+scratch/
+freeze_*.txt
+*.log
