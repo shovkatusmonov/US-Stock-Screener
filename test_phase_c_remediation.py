@@ -213,6 +213,7 @@ class TestEnterpriseAlerts:
 # 4. PRODUCTION DATABASE & CORE CODEBASE INTEGRITY
 # -----------------------------------------------------------------------------
 class TestProductionIntegrity:
+    @pytest.mark.production_verification
     def test_production_db_hash_strictly_unmodified(self):
         prod_db = "data/screener.db"
         assert os.path.exists(prod_db), "Production DB missing!"
