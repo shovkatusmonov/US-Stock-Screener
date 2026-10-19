@@ -105,7 +105,7 @@ def test_pit_window_coverage_matches_matrix_and_ignores_non_spy_dates(tmp_path):
     conn.execute("INSERT INTO prices VALUES ('BBB', '2019-05-01', 10, 11, 9, 10, 100, 10)")
     conn.commit()
 
-    hm = SP500HistoryManager()
+    hm = SP500HistoryManager(rules={}, complete=True)
     hm.membership_rules = {
         "AAA": [("2024-01-01", "2024-12-31")],
         "BBB": [("2024-01-01", "2024-12-31")],

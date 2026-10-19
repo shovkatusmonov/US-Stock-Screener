@@ -1,6 +1,16 @@
+import hashlib
 import sqlite3
 import pandas as pd
 from clean_junk_data import run_cleanup
+
+
+def file_sha256(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
 
 def test_clean_junk_dry_run_does_not_modify_db(tmp_path):
     db_file = tmp_path / "test_junk.db"
@@ -12,15 +22,36 @@ def test_clean_junk_dry_run_does_not_modify_db(tmp_path):
     conn.commit()
     conn.close()
 
+    before_hash = file_sha256(db_file)
+    conn = sqlite3.connect(str(db_file))
+    before_tables = {
+        row[0] for row in conn.execute(
+            "SELECT name FROM sqlite_master WHERE type='table'"
+        ).fetchall()
+    }
+    conn.close()
+
     res = run_cleanup(db_path=str(db_file), dry_run=True)
+
     assert res["dry_run"] is True
     assert res["candidates"]["SBNY"]["total_rows"] == 1
     assert res["candidates"]["SBNY"]["action"] == "DELETE"
+    assert file_sha256(db_file) == before_hash
 
     conn = sqlite3.connect(str(db_file))
-    cnt = conn.execute("SELECT COUNT(*) FROM prices WHERE ticker = 'SBNY'").fetchone()[0]
+    after_tables = {
+        row[0] for row in conn.execute(
+            "SELECT name FROM sqlite_master WHERE type='table'"
+        ).fetchall()
+    }
+    cnt = conn.execute(
+        "SELECT COUNT(*) FROM prices WHERE ticker = 'SBNY'"
+    ).fetchone()[0]
     conn.close()
+
+    assert after_tables == before_tables
     assert cnt == 1
+
 
 def test_clean_junk_execution_creates_backup_and_deletes(tmp_path):
     db_file = tmp_path / "test_junk.db"

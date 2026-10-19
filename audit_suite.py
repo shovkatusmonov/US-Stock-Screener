@@ -264,7 +264,7 @@ def pit_window_coverage(
         rule_dict = hm.membership_rules
     elif isinstance(rules, dict):
         rule_dict = rules
-        hm = SP500HistoryManager(complete=True)
+        hm = SP500HistoryManager(rules={}, complete=True)
         hm.membership_rules = rules
     elif hasattr(rules, "membership_rules"):
         hm = rules

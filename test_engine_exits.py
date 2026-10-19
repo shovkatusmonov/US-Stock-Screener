@@ -41,7 +41,7 @@ def test_tp1_partial_exit_and_breakeven_stop():
 
 def test_sp500_unknown_policy():
     """Qoidasi bo'lmagan noma'lum ticker allow_unknown=False da None qaytarishi shart."""
-    hm = SP500HistoryManager()
+    hm = SP500HistoryManager(rules={})
     # Bazada qoidasi yo'q bo'lgan tasodifiy ticker
     res = hm.is_member_on_date("RANDOM_TICKER", "2024-01-01", base_tickers_2026={"AAPL"}, allow_unknown=False)
     assert res is None
