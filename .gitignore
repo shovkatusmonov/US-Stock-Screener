@@ -19,3 +19,40 @@ research/
 audit_report.txt
 full_audit_report.txt
 project_status_audit.txt
+
+# VPS modular platform runtime and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*secret*
+*credential*
+*token*
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.py[cod]
+*.db
+*.sqlite
+*.sqlite3
+*.db-wal
+*.db-shm
+data/
+platform/data/
+platform/logs/
+logs/
+*.log
+*.pid
+*.tmp
+*.swp
+
+# Local configuration backups
+*.bak_*
+*.bak_*/
+
+# Not yet approved deployment service templates
+/platform/scripts/systemd/*.service
